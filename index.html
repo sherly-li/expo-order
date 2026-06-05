@@ -3,683 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Health Expo Order Input - iPad Offline</title>
-  <style>
-:root {
-  --paper:#fffdf8; --page:#f2f3f5; --ink:#20252b; --muted:#6b7280;
-  --line:#20252b; --soft-line:#d9dde3; --brand:#b91c1c; --brand-dark:#8f1717;
-  --success:#146c43; --success-bg:#eaf7ef; --blocked:#b42318; --blocked-bg:#fff1f0;
-  --gold:#b7791f; --focus:#f4c542;
-}
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-body{margin:0;background:var(--page);color:var(--ink);font-family:Arial,"Microsoft JhengHei","PingFang TC",sans-serif;font-size:15px}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-input,textarea,select{width:100%;border:1px solid var(--soft-line);border-radius:6px;background:#fff;color:var(--ink);min-height:48px;padding:7px 10px}
-input:focus,textarea:focus,select:focus,button:focus{outline:3px solid var(--focus);outline-offset:2px}
-button:disabled,input:disabled{cursor:not-allowed;opacity:.58}
-.app-shell{width:min(1000px,calc(100% - 20px));margin:0 auto;padding:10px 0 28px}
-.receipt-header{text-align:center;padding:6px 10px}
-.company-name{font-size:23px;font-weight:900}.company-name-en{font-size:21px;font-weight:900;margin-top:3px}.company-meta{font-size:20px;font-weight:900;margin-top:6px}
-.receipt-panel{background:var(--paper);border:2px solid var(--brand);border-radius:2px;padding:10px;box-shadow:0 12px 28px rgba(15,23,42,.12)}
-.receipt-meta-grid,.customer-grid,.payment-band,.remarks-row{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-bottom:0}
-.field-line{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;min-height:42px;padding:6px;border-right:1px solid var(--line)}
-.field-line:last-child{border-right:0}.field-line span{font-weight:800;white-space:nowrap}
-.invoice-field input{color:var(--brand);font-size:19px;font-weight:900;text-align:center}
-.field-stack{display:flex;flex-direction:column;gap:4px}
-.error-text{color:var(--blocked);font-size:13px;font-weight:800;min-height:18px}
-.section-title{font-size:17px;font-weight:900;margin-bottom:7px}
-.package-band,.address-band,.product-band,.saved-orders-band{border:1px solid var(--line);border-bottom:0;padding:8px}
-.package-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.package-card{min-height:56px;border:2px solid var(--soft-line);border-radius:6px;background:#fff;color:var(--ink);padding:8px;text-align:left}
-.package-card strong,.package-card span{display:block}.package-card strong{font-size:19px}.package-card span{color:var(--muted);margin-top:4px}
-.package-card.selected{border-color:var(--brand);background:#fff7f7}
-.address-row{display:grid;grid-template-columns:260px 1fr;gap:8px;align-items:stretch}
-.picker-button{min-height:44px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-weight:900;padding:8px 10px;text-align:left}
-.address-detail{border:1px solid var(--soft-line);border-radius:6px}
-.delivery-hint{margin-top:7px;border-radius:6px;padding:8px 10px;background:var(--success-bg);color:var(--success);font-weight:800}
-.delivery-hint.surcharge{background:#fff8e5;color:var(--gold)}.delivery-hint.blocked{background:var(--blocked-bg);color:var(--blocked)}
-.product-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:7px}.quantity-status{color:var(--brand);font-weight:900}.quantity-status.ok{color:var(--success)}
-.gift-box{min-width:220px;border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:#fff}.gift-box span,.gift-box strong{display:block}.gift-box span{color:var(--muted);font-size:15px;font-weight:800}
-.receipt-product-table{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}
-.product-column:first-child{border-right:1px solid var(--line)}
-.product-head,.product-line-row{display:grid;grid-template-columns:1fr 66px;align-items:center}.product-head{min-height:34px;text-align:center;font-weight:900;border-bottom:1px solid var(--line)}
-.product-head span:first-child,.product-line-row span{border-right:1px solid var(--line)}
-.product-line-row{min-height:34px;border-bottom:1px solid var(--line)}.product-line-row span{height:100%;display:flex;align-items:center;padding:4px 7px;line-height:1.25}
-.product-line-row input{height:100%;min-height:34px;border:0;border-radius:0;text-align:center;font-size:17px;font-weight:900;padding:4px}
-.care-block{display:grid;grid-template-columns:34px 1fr;border-bottom:1px solid var(--line)}.care-block:last-child{border-bottom:0}
-.care-label{display:flex;align-items:center;justify-content:center;border-right:1px solid var(--line);font-size:14px;font-weight:900;writing-mode:vertical-rl;text-orientation:mixed}
-.care-rows .product-line-row:last-child{border-bottom:0}
-.payment-methods{padding:8px;border-right:1px solid var(--line)}.payment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.radio-pill{display:flex;align-items:center;gap:7px;min-height:32px;font-weight:800}.radio-pill input{width:20px;min-height:20px;height:20px}
-.total-box{display:flex;flex-direction:column;justify-content:center;padding:10px}.total-box span{font-size:17px;font-weight:900}.total-box strong{font-size:28px;margin-top:6px}
-.remarks-row{grid-template-columns:1fr;border-bottom:1px solid var(--line)}.remarks-field{grid-template-columns:100px 1fr;border-right:0;align-items:start}.remarks-field textarea{min-height:64px;resize:vertical}
-.primary-button,.secondary-button,.danger-button{width:100%;min-height:52px;margin-top:10px;border:0;border-radius:6px;color:#fff;font-size:19px;font-weight:900}
-.primary-button{background:var(--brand)}.primary-button:hover:not(:disabled){background:var(--brand-dark)}
-.secondary-button{background:#374151}.danger-button{background:#991b1b}
-.button-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.alert{border-radius:6px;padding:10px 12px;margin-bottom:10px;font-weight:900;white-space:pre-line}.alert.success{background:var(--success-bg);border:1px solid #9bd0b2;color:var(--success)}.alert.error{background:var(--blocked-bg);border:1px solid #f0a8a0;color:var(--blocked)}
-.modal-shell{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.42);padding:12px}
-.modal-panel{width:min(820px,100%);max-height:min(680px,calc(100vh - 24px));overflow:hidden;background:#fff;border-radius:8px;box-shadow:0 20px 60px rgba(15,23,42,.28)}
-.modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border-bottom:1px solid var(--soft-line)}.modal-header h2,.notice-panel h2{margin:0;font-size:20px}
-.icon-button{width:38px;height:38px;border:0;border-radius:50%;background:#f2f3f5;font-size:25px;line-height:1}
-.picker-search{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 14px;border-bottom:1px solid var(--soft-line)}
-.clear-search{width:42px;min-height:38px;border:0;border-radius:6px;background:#f1f3f5;font-size:24px;font-weight:900}
-.picker-tabs{display:flex;align-items:center;gap:28px;min-height:46px;padding:0 18px;border-bottom:1px solid var(--soft-line)}
-.picker-tabs button,.picker-tabs span{border:0;background:transparent;color:var(--ink);font-size:18px;font-weight:800;padding:10px 4px}
-.picker-tabs button.active,.picker-tabs span{color:var(--brand)}.picker-tabs button.active{border-bottom:3px solid var(--brand)}
-.picker-results{min-height:360px;max-height:calc(100vh - 230px);overflow:auto;padding:14px 18px}.region-grid,.district-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:8px}
-.region-button,.district-button{min-height:54px;border:1px solid transparent;border-radius:6px;background:#fff;color:var(--ink);padding:8px;text-align:center;font-size:18px;font-weight:800}.district-button{border:1px solid var(--soft-line)}
-.district-button.surcharge{border-color:#e6bd6a;background:#fff9e9}.district-button.blocked{border-color:#efb0a9;background:var(--blocked-bg)}
-.search-list{display:flex;flex-direction:column;gap:4px}.search-result-button{min-height:38px;border:0;border-radius:4px;background:#fff;color:var(--ink);text-align:left;padding:6px 8px;font-size:16px}.search-result-button mark{background:transparent;color:var(--brand);font-weight:900}.empty-results{color:var(--muted);padding:20px;text-align:center}
-.notice-panel{width:min(460px,100%);padding:22px}.notice-panel p{margin:12px 0 0;line-height:1.5}#noticeModal[data-type=error] .notice-panel{border-top:8px solid var(--blocked)}#noticeModal[data-type=warning] .notice-panel{border-top:8px solid var(--gold)}
-.saved-summary{font-weight:900;color:var(--muted);margin-bottom:8px}.small-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}
-@media(max-width:840px){.receipt-meta-grid,.customer-grid,.payment-band{grid-template-columns:1fr}.field-line,.payment-methods{border-right:0;border-bottom:1px solid var(--line)}.address-row,.receipt-product-table,.package-grid{grid-template-columns:1fr}.product-column:first-child,.payment-methods{border-right:0}.region-grid,.district-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.button-grid{grid-template-columns:1fr}}
-@media(max-width:560px){body{font-size:14px}.app-shell{width:min(100% - 12px,1040px);padding-top:10px}.receipt-panel{padding:8px}.company-name,.company-name-en{font-size:19px}.company-meta{font-size:18px}.payment-grid,.region-grid,.district-grid{grid-template-columns:1fr}.field-line,.remarks-field{grid-template-columns:1fr}}
-</style>
-
+  <title>Eatabler Expo Order</title>
   <meta name="theme-color" content="#b91c1c">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Eatabler Order">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+:root{--paper:#fffdf8;--page:#f2f3f5;--ink:#20252b;--muted:#6b7280;--line:#20252b;--soft-line:#d9dde3;--brand:#b91c1c;--brand-dark:#8f1717;--success:#146c43;--success-bg:#eaf7ef;--blocked:#b42318;--blocked-bg:#fff1f0;--gold:#b7791f;--focus:#f4c542}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--page);color:var(--ink);font-family:Arial,"Microsoft JhengHei","PingFang TC",sans-serif;font-size:15px}button,input,textarea,select{font:inherit}button{cursor:pointer}input,textarea,select{width:100%;border:1px solid var(--soft-line);border-radius:6px;background:#fff;color:var(--ink);min-height:48px;padding:7px 10px}input:focus,textarea:focus,select:focus,button:focus{outline:3px solid var(--focus);outline-offset:2px}button:disabled,input:disabled{cursor:not-allowed;opacity:.58}.app-shell{width:min(1000px,calc(100% - 20px));margin:0 auto;padding:10px 0 28px}.receipt-header{text-align:center;padding:6px 10px}.company-name{font-size:23px;font-weight:900}.company-name-en{font-size:21px;font-weight:900;margin-top:3px}.company-meta{font-size:20px;font-weight:900;margin-top:6px}.pwa-note{max-width:1000px;margin:8px auto 0;padding:8px 12px;border-radius:6px;background:#fff8e5;color:#8a5a00;font-weight:800}.receipt-panel{background:var(--paper);border:2px solid var(--brand);border-radius:2px;padding:10px;box-shadow:0 12px 28px rgba(15,23,42,.12)}.receipt-meta-grid,.customer-grid,.payment-band,.remarks-row{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-bottom:0}.field-line{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;min-height:42px;padding:6px;border-right:1px solid var(--line)}.field-line:last-child{border-right:0}.field-line span{font-weight:800;white-space:nowrap}.invoice-field input{color:var(--brand);font-size:19px;font-weight:900;text-align:center}.field-stack{display:flex;flex-direction:column;gap:4px}.error-text{color:var(--blocked);font-size:13px;font-weight:800;min-height:18px}.section-title{font-size:17px;font-weight:900;margin-bottom:7px}.package-band,.address-band,.product-band,.saved-orders-band{border:1px solid var(--line);border-bottom:0;padding:8px}.package-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.package-card{min-height:56px;border:2px solid var(--soft-line);border-radius:6px;background:#fff;color:var(--ink);padding:8px;text-align:left}.package-card strong,.package-card span{display:block}.package-card strong{font-size:19px}.package-card span{color:var(--muted);margin-top:4px}.package-card.selected{border-color:var(--brand);background:#fff7f7}.address-row{display:grid;grid-template-columns:260px 1fr;gap:8px;align-items:stretch}.picker-button{min-height:44px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font-weight:900;padding:8px 10px;text-align:left}.address-detail{border:1px solid var(--soft-line);border-radius:6px}.delivery-hint{margin-top:7px;border-radius:6px;padding:8px 10px;background:var(--success-bg);color:var(--success);font-weight:800}.delivery-hint.surcharge{background:#fff8e5;color:var(--gold)}.delivery-hint.blocked{background:var(--blocked-bg);color:var(--blocked)}.product-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:7px}.quantity-status{color:var(--brand);font-weight:900}.quantity-status.ok{color:var(--success)}.gift-box{min-width:220px;border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:#fff}.gift-box span,.gift-box strong{display:block}.gift-box span{color:var(--muted);font-size:15px;font-weight:800}.receipt-product-table{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}.product-column:first-child{border-right:1px solid var(--line)}.product-head,.product-line-row{display:grid;grid-template-columns:1fr 66px;align-items:center}.product-head{min-height:34px;text-align:center;font-weight:900;border-bottom:1px solid var(--line)}.product-head span:first-child,.product-line-row span{border-right:1px solid var(--line)}.product-line-row{min-height:34px;border-bottom:1px solid var(--line)}.product-line-row span{height:100%;display:flex;align-items:center;padding:4px 7px;line-height:1.25}.product-line-row input{height:100%;min-height:34px;border:0;border-radius:0;text-align:center;font-size:17px;font-weight:900;padding:4px}.care-block{display:grid;grid-template-columns:34px 1fr;border-bottom:1px solid var(--line)}.care-block:last-child{border-bottom:0}.care-label{display:flex;align-items:center;justify-content:center;border-right:1px solid var(--line);font-size:14px;font-weight:900;writing-mode:vertical-rl;text-orientation:mixed}.care-rows .product-line-row:last-child{border-bottom:0}.payment-methods{padding:8px;border-right:1px solid var(--line)}.payment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.radio-pill{display:flex;align-items:center;gap:7px;min-height:32px;font-weight:800}.radio-pill input{width:20px;min-height:20px;height:20px}.total-box{display:flex;flex-direction:column;justify-content:center;padding:10px}.total-box span{font-size:17px;font-weight:900}.total-box strong{font-size:28px;margin-top:6px}.remarks-row{grid-template-columns:1fr;border-bottom:1px solid var(--line)}.remarks-field{grid-template-columns:100px 1fr;border-right:0;align-items:start}.remarks-field textarea{min-height:64px;resize:vertical}.primary-button,.secondary-button,.danger-button{width:100%;min-height:52px;margin-top:10px;border:0;border-radius:6px;color:#fff;font-size:19px;font-weight:900}.primary-button{background:var(--brand)}.primary-button:hover:not(:disabled){background:var(--brand-dark)}.secondary-button{background:#374151}.danger-button{background:#991b1b}.button-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.alert{border-radius:6px;padding:10px 12px;margin-bottom:10px;font-weight:900;white-space:pre-line}.alert.success{background:var(--success-bg);border:1px solid #9bd0b2;color:var(--success)}.alert.error{background:var(--blocked-bg);border:1px solid #f0a8a0;color:var(--blocked)}.modal-shell{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.42);padding:12px}.modal-panel{width:min(820px,100%);max-height:min(680px,calc(100vh - 24px));overflow:hidden;background:#fff;border-radius:8px;box-shadow:0 20px 60px rgba(15,23,42,.28)}.modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 14px;border-bottom:1px solid var(--soft-line)}.modal-header h2,.notice-panel h2{margin:0;font-size:20px}.icon-button{width:38px;height:38px;border:0;border-radius:50%;background:#f2f3f5;font-size:25px;line-height:1}.picker-search{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 14px;border-bottom:1px solid var(--soft-line)}.clear-search{width:42px;min-height:38px;border:0;border-radius:6px;background:#f1f3f5;font-size:24px;font-weight:900}.picker-tabs{display:flex;align-items:center;gap:28px;min-height:46px;padding:0 18px;border-bottom:1px solid var(--soft-line)}.picker-tabs button,.picker-tabs span{border:0;background:transparent;color:var(--ink);font-size:18px;font-weight:800;padding:10px 4px}.picker-tabs button.active,.picker-tabs span{color:var(--brand)}.picker-tabs button.active{border-bottom:3px solid var(--brand)}.picker-results{min-height:360px;max-height:calc(100vh - 230px);overflow:auto;padding:14px 18px}.region-grid,.district-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:8px}.region-button,.district-button{min-height:54px;border:1px solid transparent;border-radius:6px;background:#fff;color:var(--ink);padding:8px;text-align:center;font-size:18px;font-weight:800}.district-button{border:1px solid var(--soft-line)}.district-button.surcharge{border-color:#e6bd6a;background:#fff9e9}.district-button.blocked{border-color:#efb0a9;background:var(--blocked-bg)}.search-list{display:flex;flex-direction:column;gap:4px}.search-result-button{min-height:38px;border:0;border-radius:4px;background:#fff;color:var(--ink);text-align:left;padding:6px 8px;font-size:16px}.search-result-button mark{background:transparent;color:var(--brand);font-weight:900}.empty-results{color:var(--muted);padding:20px;text-align:center}.notice-panel{width:min(460px,100%);padding:22px}.notice-panel p{margin:12px 0 0;line-height:1.5}#noticeModal[data-type=error] .notice-panel{border-top:8px solid var(--blocked)}#noticeModal[data-type=warning] .notice-panel{border-top:8px solid var(--gold)}.saved-summary{font-weight:900;color:var(--muted);margin-bottom:8px}.small-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}@media(max-width:840px){.receipt-meta-grid,.customer-grid,.payment-band{grid-template-columns:1fr}.field-line,.payment-methods{border-right:0;border-bottom:1px solid var(--line)}.address-row,.receipt-product-table,.package-grid{grid-template-columns:1fr}.product-column:first-child,.payment-methods{border-right:0}.region-grid,.district-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.button-grid{grid-template-columns:1fr}}@media(max-width:560px){body{font-size:14px}.app-shell{width:min(100% - 12px,1040px);padding-top:10px}.receipt-panel{padding:8px}.company-name,.company-name-en{font-size:19px}.company-meta{font-size:18px}.payment-grid,.region-grid,.district-grid{grid-template-columns:1fr}.field-line,.remarks-field{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  
-<div style="max-width:1000px;margin:8px auto 0;padding:8px 12px;border-radius:6px;background:#fff8e5;color:#8a5a00;font-weight:800;font-family:Arial,'Microsoft JhengHei','PingFang TC',sans-serif;">
-  PWA 版：首次開啟需連網；加入主畫面並開啟一次後，可離線使用。請展會期間定期 Export Excel/CSV 備份。
-</div>
+<div class="pwa-note">PWA 版：首次開啟需連網；加入主畫面並開啟一次後，可離線使用。請展會期間定期 Export Excel/CSV 備份。</div>
+<main class="app-shell">
+<header class="receipt-header"><div class="company-name">膳營推動集團有限公司</div><div class="company-name-en">Eatabler Group Limited</div><div class="company-meta">Health Expo Order Input</div></header>
+<div id="alertBox" class="alert" hidden></div>
+<form id="orderForm" novalidate>
+<section class="receipt-panel">
+<div class="receipt-meta-grid"><label class="field-line"><span>日期 DATE</span><input id="orderDate" name="order_date" type="date" required></label><label class="field-line invoice-field"><span>IINV</span><input id="invoiceNo" name="invoice_no" type="text" inputmode="numeric" placeholder="000001" required></label></div>
+<div class="customer-grid"><label class="field-line"><span>客戶 Name</span><input id="customerName" name="customer_name" type="text" autocomplete="name" required></label><label class="field-line"><span>電話 Tel</span><div class="field-stack"><input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="8" required><div id="phoneError" class="error-text" hidden>請輸入8位數字手機號碼。</div></div></label></div>
+<div class="package-band"><div class="section-title">Package</div><div id="packageGrid" class="package-grid"></div></div>
+<div class="address-band"><div class="section-title">派送地址</div><div class="address-row"><button id="openAddressPicker" class="picker-button" type="button">選擇區域及地區</button><input id="addressRegion" name="address_region" type="hidden"><input id="addressDistrict" name="address_district" type="hidden"><label class="field-line address-detail"><span>詳細地址</span><input id="addressDetail" name="address_detail" type="text" autocomplete="street-address" required></label></div><div id="deliveryHint" class="delivery-hint" hidden></div></div>
+<div class="product-band"><div class="product-toolbar"><div><div class="section-title">產品 Item / Qty</div><div id="quantityStatus" class="quantity-status">請先選擇 package</div></div><div class="gift-box"><span>贈品</span><strong id="giftSummary">請先選擇 package</strong></div></div><div id="productTable" class="receipt-product-table"></div></div>
+<div class="payment-band"><div class="payment-methods"><div class="section-title">付款方式</div><div id="paymentGrid" class="payment-grid"></div></div><div class="total-box"><span>Total</span><strong id="orderTotal">$0</strong></div></div>
+<div class="remarks-row"><label class="field-line remarks-field"><span>Remarks</span><textarea id="remarks" name="remarks" rows="3"></textarea></label></div>
+<button id="submitBtn" class="primary-button" type="submit">提交訂單</button>
+<div class="saved-orders-band"><div id="savedSummary" class="saved-summary">已儲存 0 張訂單 / 0 行明細</div><div class="button-grid"><button id="exportExcelBtn" class="secondary-button" type="button">Export Excel</button><button id="exportCsvBtn" class="secondary-button" type="button">Export CSV</button><button id="clearOrdersBtn" class="danger-button" type="button">清除已儲存資料</button></div><div class="small-note">iPad/PWA 版會先把訂單儲存在此瀏覽器內。展會期間請定期 Export Excel/CSV 備份。</div></div>
+</section></form></main>
+<div id="addressPicker" class="modal-shell" hidden><div class="modal-panel address-picker" role="dialog" aria-modal="true" aria-labelledby="addressPickerTitle"><div class="modal-header"><h2 id="addressPickerTitle">選擇派送地區</h2><button id="closeAddressPicker" class="icon-button" type="button" aria-label="關閉">×</button></div><div class="picker-search"><input id="districtSearch" type="search" placeholder="輸入地區搜尋，例如 火炭 / 大埔 / 旺角"><button id="clearDistrictSearch" class="clear-search" type="button" aria-label="清除搜尋" hidden>×</button></div><div class="picker-tabs"><button id="allRegionTab" type="button">香港</button><button id="selectedRegionTab" type="button" hidden></button><span id="pickerPrompt">請選擇</span></div><div id="pickerResults" class="picker-results"></div></div></div>
+<div id="noticeModal" class="modal-shell" hidden><div class="modal-panel notice-panel" role="alertdialog" aria-modal="true" aria-labelledby="noticeTitle"><h2 id="noticeTitle"></h2><p id="noticeMessage"></p><button id="noticeOk" class="primary-button" type="button">知道了</button></div></div>
 
-  <main class="app-shell">
-    <header class="receipt-header">
-      <div class="company-name">膳營推動集團有限公司</div>
-      <div class="company-name-en">Eatabler Group Limited</div>
-      <div class="company-meta">Health Expo Order Input - iPad Offline</div>
-    </header>
-
-    <div id="alertBox" class="alert" hidden></div>
-
-    <form id="orderForm" novalidate>
-      <section class="receipt-panel">
-        <div class="receipt-meta-grid">
-          <label class="field-line">
-            <span>日期 DATE</span>
-            <input id="orderDate" name="order_date" type="date" required>
-          </label>
-          <label class="field-line invoice-field">
-            <span>IINV</span>
-            <input id="invoiceNo" name="invoice_no" type="text" inputmode="numeric" placeholder="000001" required>
-          </label>
-        </div>
-
-        <div class="customer-grid">
-          <label class="field-line">
-            <span>客戶 Name</span>
-            <input id="customerName" name="customer_name" type="text" autocomplete="name" required>
-          </label>
-          <label class="field-line">
-            <span>電話 Tel</span>
-            <div class="field-stack">
-              <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="8" required>
-              <div id="phoneError" class="error-text" hidden>請輸入8位數字手機號碼。</div>
-            </div>
-          </label>
-        </div>
-
-        <div class="package-band">
-          <div class="section-title">Package</div>
-          <div id="packageGrid" class="package-grid"></div>
-        </div>
-
-        <div class="address-band">
-          <div class="section-title">派送地址</div>
-          <div class="address-row">
-            <button id="openAddressPicker" class="picker-button" type="button">選擇區域及地區</button>
-            <input id="addressRegion" name="address_region" type="hidden">
-            <input id="addressDistrict" name="address_district" type="hidden">
-            <label class="field-line address-detail">
-              <span>詳細地址</span>
-              <input id="addressDetail" name="address_detail" type="text" autocomplete="street-address" required>
-            </label>
-          </div>
-          <div id="deliveryHint" class="delivery-hint" hidden></div>
-        </div>
-
-        <div class="product-band">
-          <div class="product-toolbar">
-            <div>
-              <div class="section-title">產品 Item / Qty</div>
-              <div id="quantityStatus" class="quantity-status">請先選擇 package</div>
-            </div>
-            <div class="gift-box">
-              <span>贈品</span>
-              <strong id="giftSummary">請先選擇 package</strong>
-            </div>
-          </div>
-          <div id="productTable" class="receipt-product-table"></div>
-        </div>
-
-        <div class="payment-band">
-          <div class="payment-methods">
-            <div class="section-title">付款方式</div>
-            <div id="paymentGrid" class="payment-grid"></div>
-          </div>
-          <div class="total-box">
-            <span>Total</span>
-            <strong id="orderTotal">$0</strong>
-          </div>
-        </div>
-
-        <div class="remarks-row">
-          <label class="field-line remarks-field">
-            <span>Remarks</span>
-            <textarea id="remarks" name="remarks" rows="3"></textarea>
-          </label>
-        </div>
-
-        <button id="submitBtn" class="primary-button" type="submit">提交訂單</button>
-
-        <div class="saved-orders-band">
-          <div id="savedSummary" class="saved-summary">已儲存 0 張訂單 / 0 行明細</div>
-          <div class="button-grid">
-            <button id="exportExcelBtn" class="secondary-button" type="button">Export Excel</button>
-            <button id="exportCsvBtn" class="secondary-button" type="button">Export CSV</button>
-            <button id="clearOrdersBtn" class="danger-button" type="button">清除已儲存資料</button>
-          </div>
-          <div class="small-note">
-            iPad 離線版會先把訂單儲存在此瀏覽器內。展會期間請定期 Export Excel/CSV 備份。
-          </div>
-        </div>
-      </section>
-    </form>
-  </main>
-
-  <div id="addressPicker" class="modal-shell" hidden>
-    <div class="modal-panel address-picker" role="dialog" aria-modal="true" aria-labelledby="addressPickerTitle">
-      <div class="modal-header">
-        <h2 id="addressPickerTitle">選擇派送地區</h2>
-        <button id="closeAddressPicker" class="icon-button" type="button" aria-label="關閉">×</button>
-      </div>
-      <div class="picker-search">
-        <input id="districtSearch" type="search" placeholder="輸入地區搜尋，例如 火炭 / 大埔 / 旺角">
-        <button id="clearDistrictSearch" class="clear-search" type="button" aria-label="清除搜尋" hidden>×</button>
-      </div>
-      <div class="picker-tabs">
-        <button id="allRegionTab" type="button">香港</button>
-        <button id="selectedRegionTab" type="button" hidden></button>
-        <span id="pickerPrompt">請選擇</span>
-      </div>
-      <div id="pickerResults" class="picker-results"></div>
-    </div>
-  </div>
-
-  <div id="noticeModal" class="modal-shell" hidden>
-    <div class="modal-panel notice-panel" role="alertdialog" aria-modal="true" aria-labelledby="noticeTitle">
-      <h2 id="noticeTitle"></h2>
-      <p id="noticeMessage"></p>
-      <button id="noticeOk" class="primary-button" type="button">知道了</button>
-    </div>
-  </div>
-
+<script id="embeddedProducts" type="application/json">[{"product_code": "MD0001", "product_name": "Salmon Steak & Chickpeas Rice", "display_name": "王牌三文魚扒鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0003", "product_name": "Spicy Grilled Chicken & Burdock Rice", "display_name": "韓式香辣雞牛蒡飯", "product_line": "Preventive"}, {"product_code": "MD0004", "product_name": "Beef Cube with Brown Rice", "display_name": "澳洲牛柳粒糙米飯", "product_line": "Preventive"}, {"product_code": "MD0005", "product_name": "Korean Duck Steak & Ginseng Rice", "display_name": "煙燻鴨胸水蔘糙米飯", "product_line": "Preventive"}, {"product_code": "MD0002", "product_name": "Ragu Bolognese Pasta", "display_name": "意式蕃茄肉醬意粉", "product_line": "Preventive"}, {"product_code": "MD0006", "product_name": "Perilla Pork Mixed Rice", "display_name": "紫蘇豬肉拌飯", "product_line": "Preventive"}, {"product_code": "MD0008", "product_name": "Yuzu Spanish Mackerel Steak Chickpeas Rice", "display_name": "柚子鯖魚鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0007", "product_name": "Spicy Grilled Pork Chickpeas Rice", "display_name": "韓式辣醬豬柳鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0102", "product_name": "Diabetes Care Chicken Paella", "display_name": "雞胸肉燴飯", "product_line": "Diabetes Care"}, {"product_code": "MD0103", "product_name": "Diabetes Care Spicy Pork & Squid Rice", "display_name": "香辣豬肉魷魚糯麥燕麥飯", "product_line": "Diabetes Care"}, {"product_code": "MD0104", "product_name": "Diabetes Care Chicken Aglio e Olio", "display_name": "意式蒜香雞肉鷹嘴豆飯", "product_line": "Diabetes Care"}, {"product_code": "MD0105", "product_name": "Diabetes Care Grilled Pork Rice", "display_name": "豉油烤豬肉牛蒡飯", "product_line": "Diabetes Care"}, {"product_code": "MD0101", "product_name": "Diabetes Care Salmon steak", "display_name": "三文魚鷹嘴豆飯", "product_line": "Diabetes Care"}, {"product_code": "MD0201", "product_name": "Cancer Care Rose Chicken Rice", "display_name": "雞胸肉鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0202", "product_name": "Cancer Care Kimchi & Flying Fish Roe Rice", "display_name": "泡菜飛魚籽鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0204", "product_name": "Cancer Care Shrimp & Tofu Rice", "display_name": "鮮蝦豆腐鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0205", "product_name": "Cancer Care Spicy Pork & Tofu Rice", "display_name": "辣炒豬肉豆腐牛蒡飯", "product_line": "Cancer Care"}, {"product_code": "MD0203", "product_name": "Cancer Care Salmon Steak", "display_name": "三文魚鷹嘴豆飯", "product_line": "Cancer Care"}]</script>
+<script id="embeddedDistricts" type="application/json">[{"region": "大埔區", "district": "大埔", "deliverable": true, "surcharge": false}, {"region": "大嶼山區", "district": "馬灣", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "愉景灣", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "東涌", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "香港國際機場", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "大嶼山", "deliverable": true, "surcharge": true}, {"region": "東區", "district": "北角", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "柴灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "筲箕灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "太古", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "鰂魚涌", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "西灣河", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "小西灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "天后", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "炮台山", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "杏花邨", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "觀塘", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "藍田", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "油塘", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "九龍灣", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "牛頭角", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "秀茂坪", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "順利", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "彩虹", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "慈雲山", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "黃大仙", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "新蒲崗", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "樂富", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "鑽石山", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "牛池灣", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "紅磡", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "九龍城", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "九龍塘", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "馬頭圍", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "土瓜灣", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "何文田", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "啟德", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "黃埔", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵涌", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "青衣", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "荔景", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵興", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵芳", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "石澳", "deliverable": true, "surcharge": true}, {"region": "南區", "district": "赤柱", "deliverable": true, "surcharge": true}, {"region": "南區", "district": "大潭", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "香港仔", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "鴨脷洲", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "薄扶林", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "華富", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "黃竹坑", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "荃灣", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "深井", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "大窩口", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "沙田", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "大圍", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "馬鞍山", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "火炭", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "九肚山", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "小瀝源", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "石門", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "長沙灣", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "荔枝角", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "美孚", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "石硤尾", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "深水埗", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "南昌", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "屯門", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "小欖", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "新墟", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "掃管笏", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "藍地", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "灣仔", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "銅鑼灣", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "跑馬地", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "大坑", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "清水灣", "deliverable": true, "surcharge": true}, {"region": "西貢區", "district": "西貢", "deliverable": true, "surcharge": true}, {"region": "西貢區", "district": "調景嶺", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "將軍澳", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "坑口", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "康城", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "寶林", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "油麻地", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "佐敦", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "尖沙咀", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "旺角", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "太子", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "大角咀", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "柯士甸", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "元朗", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "天水圍", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "屏山", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "洪水橋", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "廈村", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "新田", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "錦田", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "中環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "上環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "西環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "堅尼地城", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "金鐘", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "半山", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "西營盤", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "粉嶺", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "上水", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "北區", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "沙頭角", "deliverable": true, "surcharge": false}, {"region": "南丫島區", "district": "南丫島", "deliverable": false, "surcharge": false}, {"region": "坪洲區", "district": "坪洲", "deliverable": false, "surcharge": false}, {"region": "長洲區", "district": "長洲", "deliverable": false, "surcharge": false}]</script>
 <script>
+const PRODUCTS = JSON.parse(document.getElementById("embeddedProducts").textContent);
+const DISTRICTS = JSON.parse(document.getElementById("embeddedDistricts").textContent);
 const PACKAGE_OPTIONS = {
   "3_boxes": { boxes: 3, price: 199, juice: 1, ice_bag: 0, label: "3盒 $199，送果汁1枝", excel_value: "3 boxes" },
   "6_boxes": { boxes: 6, price: 360, juice: 2, ice_bag: 0, label: "6盒 $360，送果汁2枝", excel_value: "6 boxes" },
   "8_boxes": { boxes: 8, price: 450, juice: 3, ice_bag: 1, label: "8盒 $450，送果汁3枝及冰袋", excel_value: "8 boxes" }
 };
-const PAYMENT_METHODS = ["Cash", "Octopus", "PayMe", "Alipay", "WeChat Pay", "FPS", "AE", "Visa/Master", "Union Pay", "Other"];
-const STORAGE_KEY = "eatabler_ipad_expo_orders_v1";
+const PAYMENT_METHODS = ["Cash","Octopus","PayMe","Alipay","WeChat Pay","FPS","AE","Visa/Master","Union Pay","Other"];
+const STORAGE_KEY = "eatabler_ipad_expo_orders_v2";
 const HEADERS = ["order_id","order_datetime","customer_name","phone","address","product_line","product_code","product_name","unit_price","quantity","line_total","order_total","juice","ice_bag","payment_method","remarks"];
-
-const PRODUCTS = [{"product_code": "MD0001", "product_name": "Salmon Steak & Chickpeas Rice", "display_name": "王牌三文魚扒鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0003", "product_name": "Spicy Grilled Chicken & Burdock Rice", "display_name": "韓式香辣雞牛蒡飯", "product_line": "Preventive"}, {"product_code": "MD0004", "product_name": "Beef Cube with Brown Rice", "display_name": "澳洲牛柳粒糙米飯", "product_line": "Preventive"}, {"product_code": "MD0005", "product_name": "Korean Duck Steak & Ginseng Rice", "display_name": "煙燻鴨胸水蔘糙米飯", "product_line": "Preventive"}, {"product_code": "MD0002", "product_name": "Ragu Bolognese Pasta", "display_name": "意式蕃茄肉醬意粉", "product_line": "Preventive"}, {"product_code": "MD0006", "product_name": "Perilla Pork Mixed Rice", "display_name": "紫蘇豬肉拌飯", "product_line": "Preventive"}, {"product_code": "MD0008", "product_name": "Yuzu Spanish Mackerel Steak Chickpeas Rice", "display_name": "柚子鯖魚鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0007", "product_name": "Spicy Grilled Pork Chickpeas Rice", "display_name": "韓式辣醬豬柳鷹嘴豆飯", "product_line": "Preventive"}, {"product_code": "MD0102", "product_name": "Diabetes Care Chicken Paella", "display_name": "雞胸肉燴飯", "product_line": "Diabetes Care"}, {"product_code": "MD0103", "product_name": "Diabetes Care Spicy Pork & Squid Rice", "display_name": "香辣豬肉魷魚糯麥燕麥飯", "product_line": "Diabetes Care"}, {"product_code": "MD0104", "product_name": "Diabetes Care Chicken Aglio e Olio", "display_name": "意式蒜香雞肉鷹嘴豆飯", "product_line": "Diabetes Care"}, {"product_code": "MD0105", "product_name": "Diabetes Care Grilled Pork Rice", "display_name": "豉油烤豬肉牛蒡飯", "product_line": "Diabetes Care"}, {"product_code": "MD0101", "product_name": "Diabetes Care Salmon steak", "display_name": "三文魚鷹嘴豆飯", "product_line": "Diabetes Care"}, {"product_code": "MD0201", "product_name": "Cancer Care Rose Chicken Rice", "display_name": "雞胸肉鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0202", "product_name": "Cancer Care Kimchi & Flying Fish Roe Rice", "display_name": "泡菜飛魚籽鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0204", "product_name": "Cancer Care Shrimp & Tofu Rice", "display_name": "鮮蝦豆腐鷹嘴豆飯", "product_line": "Cancer Care"}, {"product_code": "MD0205", "product_name": "Cancer Care Spicy Pork & Tofu Rice", "display_name": "辣炒豬肉豆腐牛蒡飯", "product_line": "Cancer Care"}, {"product_code": "MD0203", "product_name": "Cancer Care Salmon Steak", "display_name": "三文魚鷹嘴豆飯", "product_line": "Cancer Care"}];
-const DISTRICTS = [{"region": "大埔區", "district": "大埔", "deliverable": true, "surcharge": false}, {"region": "大嶼山區", "district": "馬灣", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "愉景灣", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "東涌", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "香港國際機場", "deliverable": true, "surcharge": true}, {"region": "大嶼山區", "district": "大嶼山", "deliverable": true, "surcharge": true}, {"region": "東區", "district": "北角", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "柴灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "筲箕灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "太古", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "鰂魚涌", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "西灣河", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "小西灣", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "天后", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "炮台山", "deliverable": true, "surcharge": false}, {"region": "東區", "district": "杏花邨", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "觀塘", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "藍田", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "油塘", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "九龍灣", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "牛頭角", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "秀茂坪", "deliverable": true, "surcharge": false}, {"region": "觀塘區", "district": "順利", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "彩虹", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "慈雲山", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "黃大仙", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "新蒲崗", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "樂富", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "鑽石山", "deliverable": true, "surcharge": false}, {"region": "黃大仙區", "district": "牛池灣", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "紅磡", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "九龍城", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "九龍塘", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "馬頭圍", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "土瓜灣", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "何文田", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "啟德", "deliverable": true, "surcharge": false}, {"region": "九龍城區", "district": "黃埔", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵涌", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "青衣", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "荔景", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵興", "deliverable": true, "surcharge": false}, {"region": "葵青區", "district": "葵芳", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "石澳", "deliverable": true, "surcharge": true}, {"region": "南區", "district": "赤柱", "deliverable": true, "surcharge": true}, {"region": "南區", "district": "大潭", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "香港仔", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "鴨脷洲", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "薄扶林", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "華富", "deliverable": true, "surcharge": false}, {"region": "南區", "district": "黃竹坑", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "荃灣", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "深井", "deliverable": true, "surcharge": false}, {"region": "荃灣區", "district": "大窩口", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "沙田", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "大圍", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "馬鞍山", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "火炭", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "九肚山", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "小瀝源", "deliverable": true, "surcharge": false}, {"region": "沙田區", "district": "石門", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "長沙灣", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "荔枝角", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "美孚", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "石硤尾", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "深水埗", "deliverable": true, "surcharge": false}, {"region": "深水埗區", "district": "南昌", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "屯門", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "小欖", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "新墟", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "掃管笏", "deliverable": true, "surcharge": false}, {"region": "屯門區", "district": "藍地", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "灣仔", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "銅鑼灣", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "跑馬地", "deliverable": true, "surcharge": false}, {"region": "灣仔區", "district": "大坑", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "清水灣", "deliverable": true, "surcharge": true}, {"region": "西貢區", "district": "西貢", "deliverable": true, "surcharge": true}, {"region": "西貢區", "district": "調景嶺", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "將軍澳", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "坑口", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "康城", "deliverable": true, "surcharge": false}, {"region": "西貢區", "district": "寶林", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "油麻地", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "佐敦", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "尖沙咀", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "旺角", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "太子", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "大角咀", "deliverable": true, "surcharge": false}, {"region": "油尖旺區", "district": "柯士甸", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "元朗", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "天水圍", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "屏山", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "洪水橋", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "廈村", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "新田", "deliverable": true, "surcharge": false}, {"region": "元朗區", "district": "錦田", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "中環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "上環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "西環", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "堅尼地城", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "金鐘", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "半山", "deliverable": true, "surcharge": false}, {"region": "中西區", "district": "西營盤", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "粉嶺", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "上水", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "北區", "deliverable": true, "surcharge": false}, {"region": "北區", "district": "沙頭角", "deliverable": true, "surcharge": false}, {"region": "南丫島區", "district": "南丫島", "deliverable": false, "surcharge": false}, {"region": "坪洲區", "district": "坪洲", "deliverable": false, "surcharge": false}, {"region": "長洲區", "district": "長洲", "deliverable": false, "surcharge": false}];
-let selectedPackage = "";
-let selectedRegion = "";
-let pickerMode = "region";
-
+let selectedPackage = ""; let selectedRegion = ""; let pickerMode = "region";
 const $ = (id) => document.getElementById(id);
-const alertBox = $("alertBox"), orderForm = $("orderForm"), submitBtn = $("submitBtn");
-const invoiceNo = $("invoiceNo"), phone = $("phone"), phoneError = $("phoneError");
-const addressRegion = $("addressRegion"), addressDistrict = $("addressDistrict"), addressDetail = $("addressDetail");
-const openAddressPicker = $("openAddressPicker"), addressPicker = $("addressPicker"), closeAddressPicker = $("closeAddressPicker");
-const pickerResults = $("pickerResults"), allRegionTab = $("allRegionTab"), selectedRegionTab = $("selectedRegionTab"), pickerPrompt = $("pickerPrompt");
-const districtSearch = $("districtSearch"), clearDistrictSearch = $("clearDistrictSearch"), deliveryHint = $("deliveryHint");
-const quantityStatus = $("quantityStatus"), giftSummary = $("giftSummary"), orderTotal = $("orderTotal");
-const noticeModal = $("noticeModal"), noticeTitle = $("noticeTitle"), noticeMessage = $("noticeMessage"), noticeOk = $("noticeOk");
-const savedSummary = $("savedSummary");
-
-function todayISO(){ return new Date().toISOString().slice(0,10); }
-function padInvoice(value){ const digits=String(value||"").replace(/\D/g,""); return digits ? digits.padStart(6,"0") : ""; }
-function clean(value){ return String(value || "").trim(); }
-function phoneValid(value){ return /^\d{8}$/.test(clean(value)); }
-function escapeHtml(value){ return String(value).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c])); }
-function showAlert(message,type){ alertBox.textContent=message; alertBox.className=`alert ${type}`; alertBox.hidden=false; window.scrollTo({top:0,behavior:"smooth"}); }
-function clearAlert(){ alertBox.hidden=true; alertBox.textContent=""; alertBox.className="alert"; }
-function showNotice(title,message,type){ noticeTitle.textContent=title; noticeMessage.textContent=message; noticeModal.dataset.type=type; noticeModal.hidden=false; }
-function closeNotice(){ noticeModal.hidden=true; }
-
-function initData(){
-  renderPackages();
-  renderPaymentMethods();
-  renderProducts();
-  resetForm();
-  updateSavedSummary();
-}
-
-function renderPackages(){
-  const grid = $("packageGrid");
-  grid.innerHTML = "";
-  Object.entries(PACKAGE_OPTIONS).forEach(([key, pkg]) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "package-card";
-    btn.dataset.package = key;
-    btn.innerHTML = `<strong>${escapeHtml(pkg.label.split(" ")[0])}</strong><span>${escapeHtml(pkg.label)}</span>`;
-    btn.addEventListener("click", () => choosePackage(key));
-    grid.appendChild(btn);
-  });
-}
-
-function renderPaymentMethods(){
-  const grid = $("paymentGrid");
-  grid.innerHTML = "";
-  PAYMENT_METHODS.forEach((method, idx) => {
-    const label = document.createElement("label");
-    label.className = "radio-pill";
-    label.innerHTML = `<input type="radio" name="payment_method" value="${escapeHtml(method)}" ${idx===0?"checked":""}><span>${escapeHtml(method)}</span>`;
-    grid.appendChild(label);
-  });
-}
-
-function renderProducts(){
-  const table = $("productTable");
-  const preventive = PRODUCTS.filter(p => p.product_line === "Preventive");
-  const diabetes = PRODUCTS.filter(p => p.product_line === "Diabetes Care");
-  const cancer = PRODUCTS.filter(p => p.product_line === "Cancer Care");
-
-  function row(p){
-    return `<label class="product-line-row"><span>${escapeHtml(p.display_name || p.product_name)}</span><input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="0" data-code="${escapeHtml(p.product_code)}"></label>`;
-  }
-  table.innerHTML = `
-    <div class="product-column">
-      <div class="product-head"><span>Item</span><span>Qty</span></div>
-      ${preventive.map(row).join("")}
-    </div>
-    <div class="product-column right-column">
-      <div class="product-head"><span>Item</span><span>Qty</span></div>
-      <div class="care-block"><div class="care-label">糖尿病護理餐</div><div class="care-rows">${diabetes.map(row).join("")}</div></div>
-      <div class="care-block"><div class="care-label">癌症護理餐</div><div class="care-rows">${cancer.map(row).join("")}</div></div>
-    </div>`;
-  document.querySelectorAll(".qty-input").forEach(input => input.addEventListener("input", handleQtyInput));
-}
-
-function qtyInputs(){ return [...document.querySelectorAll(".qty-input")]; }
-function selectedQtyTotal(){ return qtyInputs().reduce((sum,input)=>sum+Number(input.value||0),0); }
-function setProductsEnabled(enabled){
-  qtyInputs().forEach(input => {
-    input.disabled = !enabled;
-    input.max = enabled && selectedPackage ? PACKAGE_OPTIONS[selectedPackage].boxes : 0;
-    if(!enabled) input.value = "0";
-  });
-}
-function updatePackageUI(){
-  document.querySelectorAll(".package-card").forEach(btn => btn.classList.toggle("selected", btn.dataset.package === selectedPackage));
-  if(!selectedPackage){
-    setProductsEnabled(false);
-    quantityStatus.textContent = "請先選擇 package";
-    quantityStatus.className = "quantity-status";
-    giftSummary.textContent = "請先選擇 package";
-    orderTotal.textContent = "$0";
-    return;
-  }
-  const pkg = PACKAGE_OPTIONS[selectedPackage];
-  setProductsEnabled(true);
-  const total = selectedQtyTotal();
-  const remaining = pkg.boxes - total;
-  quantityStatus.textContent = `已輸入 ${total} / ${pkg.boxes} 盒，尚餘 ${Math.max(remaining,0)} 盒`;
-  quantityStatus.className = `quantity-status ${remaining === 0 ? "ok" : ""}`;
-  giftSummary.textContent = `果汁 ${pkg.juice} 枝${pkg.ice_bag ? "，冰袋 1 個" : ""}`;
-  orderTotal.textContent = `$${pkg.price}`;
-}
-function choosePackage(key){
-  selectedPackage = key;
-  qtyInputs().forEach(input => input.value = "0");
-  clearAlert();
-  updatePackageUI();
-}
-function handleQtyInput(event){
-  const input = event.target;
-  input.value = Math.max(0, Math.floor(Number(input.value || 0)));
-  if(!selectedPackage){ input.value = "0"; updatePackageUI(); return; }
-  const target = PACKAGE_OPTIONS[selectedPackage].boxes;
-  const total = selectedQtyTotal();
-  if(total > target){
-    const overflow = total - target;
-    input.value = Math.max(0, Number(input.value || 0) - overflow);
-    showNotice("超過 package 數量", `此 package 只能輸入 ${target} 盒，已自動調整數量。`, "warning");
-  }
-  updatePackageUI();
-}
-
-function regionNames(){ return [...new Set(DISTRICTS.map(item => item.region))]; }
-function currentDistrictInfo(){ return DISTRICTS.find(item => item.region === addressRegion.value && item.district === addressDistrict.value); }
-function updateAddressButton(){
-  if(addressRegion.value && addressDistrict.value) openAddressPicker.textContent = `${addressRegion.value} - ${addressDistrict.value}`;
-  else openAddressPicker.textContent = "選擇區域及地區";
-  const info = currentDistrictInfo();
-  deliveryHint.hidden = !info;
-  deliveryHint.className = "delivery-hint";
-  if(!info) deliveryHint.textContent = "";
-  else if(!info.deliverable){ deliveryHint.textContent = "此地區暫不支援派送，不能提交訂單。"; deliveryHint.classList.add("blocked"); }
-  else if(info.surcharge){ deliveryHint.textContent = "此地區可派送，但可能需要收取附加費。"; deliveryHint.classList.add("surcharge"); }
-  else deliveryHint.textContent = "此地區可派送。";
-}
-function highlightText(value, term){
-  const safeValue = escapeHtml(value);
-  const safeTerm = escapeHtml(term);
-  return safeTerm ? safeValue.split(safeTerm).join(`<mark>${safeTerm}</mark>`) : safeValue;
-}
-function chooseDistrict(item){
-  addressRegion.value = item.region;
-  addressDistrict.value = item.district;
-  selectedRegion = item.region;
-  pickerMode = "district";
-  districtSearch.value = "";
-  addressPicker.hidden = true;
-  updateAddressButton();
-  if(!item.deliverable) showNotice("暫不支援派送", `${item.region} - ${item.district} 暫不支援派送，不能提交訂單。`, "error");
-  else if(item.surcharge) showNotice("可能需要附加費", `${item.region} - ${item.district} 可派送，但可能需要收取附加費。`, "warning");
-}
-function renderRegionChoices(){
-  pickerPrompt.textContent = "請選擇";
-  selectedRegionTab.hidden = true;
-  pickerResults.className = "picker-results region-grid";
-  pickerResults.innerHTML = "";
-  regionNames().forEach(region => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = region;
-    button.className = "region-button";
-    button.addEventListener("click", () => { selectedRegion = region; pickerMode = "district"; districtSearch.value = ""; renderPicker(); });
-    pickerResults.appendChild(button);
-  });
-}
-function renderDistrictChoices(){
-  pickerPrompt.textContent = "請選擇";
-  selectedRegionTab.hidden = false;
-  selectedRegionTab.textContent = selectedRegion;
-  pickerResults.className = "picker-results district-grid";
-  pickerResults.innerHTML = "";
-  DISTRICTS.filter(item => item.region === selectedRegion).forEach(item => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "district-button";
-    if(!item.deliverable) button.classList.add("blocked");
-    if(item.deliverable && item.surcharge) button.classList.add("surcharge");
-    button.innerHTML = `<strong>${escapeHtml(item.district)}</strong>`;
-    button.addEventListener("click", () => chooseDistrict(item));
-    pickerResults.appendChild(button);
-  });
-}
-function renderSearchResults(){
-  const term = districtSearch.value.trim();
-  const search = term.toLowerCase();
-  pickerPrompt.textContent = "搜尋結果";
-  selectedRegionTab.hidden = true;
-  pickerResults.className = "picker-results search-list";
-  pickerResults.innerHTML = "";
-  const matches = DISTRICTS.filter(item =>
-    item.region.toLowerCase().includes(search) || item.district.toLowerCase().includes(search)
-  );
-  if(!matches.length){
-    const empty = document.createElement("div");
-    empty.className = "empty-results";
-    empty.textContent = "沒有符合的地區";
-    pickerResults.appendChild(empty);
-    return;
-  }
-  matches.forEach(item => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "search-result-button";
-    if(!item.deliverable) button.classList.add("blocked");
-    if(item.deliverable && item.surcharge) button.classList.add("surcharge");
-    button.innerHTML = `香港 - ${highlightText(item.region, term)} - ${highlightText(item.district, term)}`;
-    button.addEventListener("click", () => chooseDistrict(item));
-    pickerResults.appendChild(button);
-  });
-}
-function renderPicker(){
-  const hasSearch = Boolean(districtSearch.value.trim());
-  clearDistrictSearch.hidden = !hasSearch;
-  allRegionTab.classList.toggle("active", pickerMode === "region" && !hasSearch);
-  selectedRegionTab.classList.toggle("active", pickerMode === "district" && !hasSearch);
-  if(hasSearch) renderSearchResults();
-  else if(pickerMode === "district" && selectedRegion) renderDistrictChoices();
-  else renderRegionChoices();
-}
-function openPicker(){
-  selectedRegion = addressRegion.value || selectedRegion || "";
-  pickerMode = selectedRegion ? "district" : "region";
-  districtSearch.value = "";
-  renderPicker();
-  addressPicker.hidden = false;
-  setTimeout(() => districtSearch.focus(), 150);
-}
-
-function productByCode(code){ return PRODUCTS.find(p => p.product_code === code); }
-function allocateAmounts(items, pkg){
-  let remaining = pkg.price;
-  return items.map((item, idx) => {
-    let lineTotal;
-    if(idx === items.length - 1) lineTotal = Number(remaining.toFixed(2));
-    else {
-      lineTotal = Number((pkg.price * item.quantity / pkg.boxes).toFixed(2));
-      remaining -= lineTotal;
-    }
-    const unitPrice = Number((lineTotal / item.quantity).toFixed(4));
-    return {...item, unit_price: unitPrice, line_total: lineTotal};
-  });
-}
-function collectItems(){
-  return qtyInputs().map(input => {
-    const product = productByCode(input.dataset.code);
-    return product ? {...product, quantity: Number(input.value || 0)} : null;
-  }).filter(item => item && item.quantity > 0);
-}
-function validatePhoneInline(){
-  const value = clean(phone.value);
-  if(!value){ phoneError.hidden = true; return false; }
-  const ok = phoneValid(value);
-  phoneError.hidden = ok;
-  return ok;
-}
-function collectPayload(){
-  const method = document.querySelector("input[name='payment_method']:checked");
-  return {
-    invoice_no: padInvoice(invoiceNo.value),
-    order_date: $("orderDate").value,
-    customer_name: clean($("customerName").value),
-    phone: clean(phone.value),
-    address_region: addressRegion.value,
-    address_district: addressDistrict.value,
-    address_detail: clean(addressDetail.value),
-    package_type: selectedPackage,
-    payment_method: method ? method.value : "",
-    remarks: clean($("remarks").value),
-    items: collectItems()
-  };
-}
-function validatePayload(payload){
-  const errors = [];
-  const district = currentDistrictInfo();
-  if(!payload.invoice_no) errors.push("請填寫 Invoice No.。");
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(payload.order_date)) errors.push("請填寫有效下單日期。");
-  if(!payload.customer_name) errors.push("請填寫客戶姓名。");
-  if(!payload.phone) errors.push("請填寫電話。");
-  else if(!phoneValid(payload.phone)) errors.push("電話必須是8位數字。");
-  if(!payload.address_region || !payload.address_district) errors.push("請選擇區域及地區。");
-  if(district && !district.deliverable) errors.push("所選地區暫不支援派送，不能提交訂單。");
-  if(!payload.address_detail) errors.push("請填寫詳細地址。");
-  if(!payload.package_type) errors.push("請選擇 package。");
-  if(payload.package_type){
-    const pkg = PACKAGE_OPTIONS[payload.package_type];
-    const total = selectedQtyTotal();
-    if(total !== pkg.boxes) errors.push(`此 package 必須剛好輸入 ${pkg.boxes} 盒，現在已輸入 ${total} 盒。`);
-  }
-  return errors;
-}
-function getSavedRows(){
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-  catch(e){ return []; }
-}
-function saveRows(rows){ localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); updateSavedSummary(); }
-function buildOrderRows(payload){
-  const pkg = PACKAGE_OPTIONS[payload.package_type];
-  const invoice = padInvoice(payload.invoice_no);
-  const orderId = `EXPO-${invoice}`;
-  const orderDatetime = `${payload.order_date} 00:00:00`;
-  const address = `${payload.address_region} - ${payload.address_district} - ${payload.address_detail}`;
-  const allocated = allocateAmounts(payload.items, pkg);
-  return allocated.map((item, idx) => ({
-    order_id: orderId,
-    order_datetime: orderDatetime,
-    customer_name: payload.customer_name,
-    phone: payload.phone,
-    address,
-    product_line: item.product_line,
-    product_code: item.product_code,
-    product_name: item.product_name,
-    unit_price: item.unit_price,
-    quantity: item.quantity,
-    line_total: item.line_total,
-    order_total: pkg.price,
-    juice: idx === 0 ? pkg.juice : 0,
-    ice_bag: idx === 0 ? pkg.ice_bag : 0,
-    payment_method: payload.payment_method,
-    remarks: payload.remarks
-  }));
-}
-function duplicateOrderId(orderId){
-  return getSavedRows().some(row => row.order_id === orderId);
-}
-function updateSavedSummary(){
-  const rows = getSavedRows();
-  const orderCount = new Set(rows.map(r => r.order_id)).size;
-  savedSummary.textContent = `已儲存 ${orderCount} 張訂單 / ${rows.length} 行明細`;
-}
-function resetForm(){
-  orderForm.reset();
-  $("orderDate").value = todayISO();
-  invoiceNo.value = "";
-  phoneError.hidden = true;
-  addressRegion.value = "";
-  addressDistrict.value = "";
-  selectedRegion = "";
-  selectedPackage = "";
-  qtyInputs().forEach(input => input.value = "0");
-  updateAddressButton();
-  updatePackageUI();
-}
-function csvEscape(value){
-  const text = String(value ?? "");
-  return /[",\n\r]/.test(text) ? `"${text.replace(/"/g,'""')}"` : text;
-}
-function rowsToCsv(rows){
-  return [HEADERS.join(","), ...rows.map(row => HEADERS.map(h => csvEscape(row[h])).join(","))].join("\r\n");
-}
-function downloadBlob(blob, filename){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
-}
-function exportCsv(){
-  const rows = getSavedRows();
-  if(!rows.length){ showAlert("目前沒有可匯出的訂單。", "error"); return; }
-  const csv = "\ufeff" + rowsToCsv(rows);
-  downloadBlob(new Blob([csv], {type:"text/csv;charset=utf-8"}), `expo_sales_orders_${todayISO()}.csv`);
-}
-function exportExcel(){
-  const rows = getSavedRows();
-  if(!rows.length){ showAlert("目前沒有可匯出的訂單。", "error"); return; }
-  const th = HEADERS.map(h => `<th>${escapeHtml(h)}</th>`).join("");
-  const trs = rows.map(row => `<tr>${HEADERS.map(h => `<td>${escapeHtml(row[h] ?? "")}</td>`).join("")}</tr>`).join("");
-  const excelHtml = `<!doctype html><html><head><meta charset="utf-8">
-  <meta name="theme-color" content="#b91c1c">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Eatabler Order">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
-</head><body><table border="1"><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch((error) => {
-      console.log("Service worker registration failed:", error);
-    });
-  });
-}
+const alertBox=$("alertBox"), orderForm=$("orderForm"), invoiceNo=$("invoiceNo"), phone=$("phone"), phoneError=$("phoneError");
+const addressRegion=$("addressRegion"), addressDistrict=$("addressDistrict"), addressDetail=$("addressDetail"), openAddressPicker=$("openAddressPicker"), addressPicker=$("addressPicker"), closeAddressPicker=$("closeAddressPicker");
+const pickerResults=$("pickerResults"), allRegionTab=$("allRegionTab"), selectedRegionTab=$("selectedRegionTab"), pickerPrompt=$("pickerPrompt"), districtSearch=$("districtSearch"), clearDistrictSearch=$("clearDistrictSearch"), deliveryHint=$("deliveryHint");
+const quantityStatus=$("quantityStatus"), giftSummary=$("giftSummary"), orderTotal=$("orderTotal"), noticeModal=$("noticeModal"), noticeTitle=$("noticeTitle"), noticeMessage=$("noticeMessage"), noticeOk=$("noticeOk"), savedSummary=$("savedSummary");
+function todayISO(){return new Date().toISOString().slice(0,10)} function padInvoice(v){const d=String(v||"").replace(/\D/g,"");return d?d.padStart(6,"0"):""} function clean(v){return String(v||"").trim()} function phoneValid(v){return /^\d{8}$/.test(clean(v))}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showAlert(m,t){alertBox.textContent=m;alertBox.className=`alert ${t}`;alertBox.hidden=false;window.scrollTo({top:0,behavior:"smooth"})} function clearAlert(){alertBox.hidden=true;alertBox.textContent="";alertBox.className="alert"}
+function showNotice(t,m,type){noticeTitle.textContent=t;noticeMessage.textContent=m;noticeModal.dataset.type=type;noticeModal.hidden=false} function closeNotice(){noticeModal.hidden=true}
+function renderPackages(){const g=$("packageGrid");g.innerHTML="";Object.entries(PACKAGE_OPTIONS).forEach(([key,p])=>{const b=document.createElement("button");b.type="button";b.className="package-card";b.dataset.package=key;b.innerHTML=`<strong>${escapeHtml(p.label.split(" ")[0])}</strong><span>${escapeHtml(p.label)}</span>`;b.addEventListener("click",()=>choosePackage(key));g.appendChild(b)})}
+function renderPaymentMethods(){const g=$("paymentGrid");g.innerHTML="";PAYMENT_METHODS.forEach((m,i)=>{const l=document.createElement("label");l.className="radio-pill";l.innerHTML=`<input type="radio" name="payment_method" value="${escapeHtml(m)}" ${i===0?"checked":""}><span>${escapeHtml(m)}</span>`;g.appendChild(l)})}
+function renderProducts(){const table=$("productTable");const pre=PRODUCTS.filter(p=>p.product_line==="Preventive"), dia=PRODUCTS.filter(p=>p.product_line==="Diabetes Care"), can=PRODUCTS.filter(p=>p.product_line==="Cancer Care");const row=p=>`<label class="product-line-row"><span>${escapeHtml(p.display_name||p.product_name)}</span><input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="0" data-code="${escapeHtml(p.product_code)}"></label>`;table.innerHTML=`<div class="product-column"><div class="product-head"><span>Item</span><span>Qty</span></div>${pre.map(row).join("")}</div><div class="product-column right-column"><div class="product-head"><span>Item</span><span>Qty</span></div><div class="care-block"><div class="care-label">糖尿病護理餐</div><div class="care-rows">${dia.map(row).join("")}</div></div><div class="care-block"><div class="care-label">癌症護理餐</div><div class="care-rows">${can.map(row).join("")}</div></div></div>`;document.querySelectorAll(".qty-input").forEach(i=>i.addEventListener("input",handleQtyInput));}
+function qtyInputs(){return [...document.querySelectorAll(".qty-input")]} function selectedQtyTotal(){return qtyInputs().reduce((s,i)=>s+Number(i.value||0),0)} function setProductsEnabled(e){qtyInputs().forEach(i=>{i.disabled=!e;i.max=e&&selectedPackage?PACKAGE_OPTIONS[selectedPackage].boxes:0;if(!e)i.value="0"})}
+function updatePackageUI(){document.querySelectorAll(".package-card").forEach(b=>b.classList.toggle("selected",b.dataset.package===selectedPackage));if(!selectedPackage){setProductsEnabled(false);quantityStatus.textContent="請先選擇 package";quantityStatus.className="quantity-status";giftSummary.textContent="請先選擇 package";orderTotal.textContent="$0";return} const p=PACKAGE_OPTIONS[selectedPackage];setProductsEnabled(true);const total=selectedQtyTotal(), rem=p.boxes-total;quantityStatus.textContent=`已輸入 ${total} / ${p.boxes} 盒，尚餘 ${Math.max(rem,0)} 盒`;quantityStatus.className=`quantity-status ${rem===0?"ok":""}`;giftSummary.textContent=`果汁 ${p.juice} 枝${p.ice_bag?"，冰袋 1 個":""}`;orderTotal.textContent=`${p.price}`;}
+function choosePackage(k){selectedPackage=k;qtyInputs().forEach(i=>i.value="0");clearAlert();updatePackageUI()} function handleQtyInput(e){const i=e.target;i.value=Math.max(0,Math.floor(Number(i.value||0)));if(!selectedPackage){i.value="0";updatePackageUI();return} const target=PACKAGE_OPTIONS[selectedPackage].boxes,total=selectedQtyTotal();if(total>target){const overflow=total-target;i.value=Math.max(0,Number(i.value||0)-overflow);showNotice("超過 package 數量",`此 package 只能輸入 ${target} 盒，已自動調整數量。`,"warning")} updatePackageUI();}
+function regionNames(){return [...new Set(DISTRICTS.map(i=>i.region))]} function currentDistrictInfo(){return DISTRICTS.find(i=>i.region===addressRegion.value&&i.district===addressDistrict.value)}
+function updateAddressButton(){if(addressRegion.value&&addressDistrict.value)openAddressPicker.textContent=`${addressRegion.value} - ${addressDistrict.value}`;else openAddressPicker.textContent="選擇區域及地區";const info=currentDistrictInfo();deliveryHint.hidden=!info;deliveryHint.className="delivery-hint";if(!info)deliveryHint.textContent="";else if(!info.deliverable){deliveryHint.textContent="此地區暫不支援派送，不能提交訂單。";deliveryHint.classList.add("blocked")}else if(info.surcharge){deliveryHint.textContent="此地區可派送，但可能需要收取附加費。";deliveryHint.classList.add("surcharge")}else deliveryHint.textContent="此地區可派送。";}
+function highlightText(v,t){const sv=escapeHtml(v),st=escapeHtml(t);return st?sv.split(st).join(`<mark>${st}</mark>`):sv} function chooseDistrict(item){addressRegion.value=item.region;addressDistrict.value=item.district;selectedRegion=item.region;pickerMode="district";districtSearch.value="";addressPicker.hidden=true;updateAddressButton();if(!item.deliverable)showNotice("暫不支援派送",`${item.region} - ${item.district} 暫不支援派送，不能提交訂單。`,"error");else if(item.surcharge)showNotice("可能需要附加費",`${item.region} - ${item.district} 可派送，但可能需要收取附加費。`,"warning");}
+function renderRegionChoices(){pickerPrompt.textContent="請選擇";selectedRegionTab.hidden=true;pickerResults.className="picker-results region-grid";pickerResults.innerHTML="";regionNames().forEach(r=>{const b=document.createElement("button");b.type="button";b.textContent=r;b.className="region-button";b.addEventListener("click",()=>{selectedRegion=r;pickerMode="district";districtSearch.value="";renderPicker()});pickerResults.appendChild(b)})}
+function renderDistrictChoices(){pickerPrompt.textContent="請選擇";selectedRegionTab.hidden=false;selectedRegionTab.textContent=selectedRegion;pickerResults.className="picker-results district-grid";pickerResults.innerHTML="";DISTRICTS.filter(i=>i.region===selectedRegion).forEach(item=>{const b=document.createElement("button");b.type="button";b.className="district-button";if(!item.deliverable)b.classList.add("blocked");if(item.deliverable&&item.surcharge)b.classList.add("surcharge");b.innerHTML=`<strong>${escapeHtml(item.district)}</strong>`;b.addEventListener("click",()=>chooseDistrict(item));pickerResults.appendChild(b)})}
+function renderSearchResults(){const term=districtSearch.value.trim(),search=term.toLowerCase();pickerPrompt.textContent="搜尋結果";selectedRegionTab.hidden=true;pickerResults.className="picker-results search-list";pickerResults.innerHTML="";const matches=DISTRICTS.filter(i=>i.region.toLowerCase().includes(search)||i.district.toLowerCase().includes(search));if(!matches.length){const e=document.createElement("div");e.className="empty-results";e.textContent="沒有符合的地區";pickerResults.appendChild(e);return}matches.forEach(item=>{const b=document.createElement("button");b.type="button";b.className="search-result-button";if(!item.deliverable)b.classList.add("blocked");if(item.deliverable&&item.surcharge)b.classList.add("surcharge");b.innerHTML=`香港 - ${highlightText(item.region,term)} - ${highlightText(item.district,term)}`;b.addEventListener("click",()=>chooseDistrict(item));pickerResults.appendChild(b)})}
+function renderPicker(){const has=Boolean(districtSearch.value.trim());clearDistrictSearch.hidden=!has;allRegionTab.classList.toggle("active",pickerMode==="region"&&!has);selectedRegionTab.classList.toggle("active",pickerMode==="district"&&!has);if(has)renderSearchResults();else if(pickerMode==="district"&&selectedRegion)renderDistrictChoices();else renderRegionChoices();} function openPicker(){selectedRegion=addressRegion.value||selectedRegion||"";pickerMode=selectedRegion?"district":"region";districtSearch.value="";renderPicker();addressPicker.hidden=false;setTimeout(()=>districtSearch.focus(),150)}
+function productByCode(c){return PRODUCTS.find(p=>p.product_code===c)} function collectItems(){return qtyInputs().map(i=>{const p=productByCode(i.dataset.code);return p?{...p,quantity:Number(i.value||0)}:null}).filter(i=>i&&i.quantity>0)} function allocateAmounts(items,pkg){let rem=pkg.price;return items.map((it,idx)=>{let line;if(idx===items.length-1)line=Number(rem.toFixed(2));else{line=Number((pkg.price*it.quantity/pkg.boxes).toFixed(2));rem-=line} return {...it,unit_price:Number((line/it.quantity).toFixed(4)),line_total:line}})}
+function validatePhoneInline(){const v=clean(phone.value);if(!v){phoneError.hidden=true;return false}const ok=phoneValid(v);phoneError.hidden=ok;return ok} function collectPayload(){const method=document.querySelector("input[name='payment_method']:checked");return {invoice_no:padInvoice(invoiceNo.value),order_date:$("orderDate").value,customer_name:clean($("customerName").value),phone:clean(phone.value),address_region:addressRegion.value,address_district:addressDistrict.value,address_detail:clean(addressDetail.value),package_type:selectedPackage,payment_method:method?method.value:"",remarks:clean($("remarks").value),items:collectItems()}}
+function validatePayload(p){const errors=[],district=currentDistrictInfo();if(!p.invoice_no)errors.push("請填寫 Invoice No.。");if(!/^\d{4}-\d{2}-\d{2}$/.test(p.order_date))errors.push("請填寫有效下單日期。");if(!p.customer_name)errors.push("請填寫客戶姓名。");if(!p.phone)errors.push("請填寫電話。");else if(!phoneValid(p.phone))errors.push("電話必須是8位數字。");if(!p.address_region||!p.address_district)errors.push("請選擇區域及地區。");if(district&&!district.deliverable)errors.push("所選地區暫不支援派送，不能提交訂單。");if(!p.address_detail)errors.push("請填寫詳細地址。");if(!p.package_type)errors.push("請選擇 package。");if(p.package_type){const pkg=PACKAGE_OPTIONS[p.package_type],total=selectedQtyTotal();if(total!==pkg.boxes)errors.push(`此 package 必須剛好輸入 ${pkg.boxes} 盒，現在已輸入 ${total} 盒。`)}return errors}
+function getSavedRows(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){return[]}} function saveRows(rows){localStorage.setItem(STORAGE_KEY,JSON.stringify(rows));updateSavedSummary()} function duplicateOrderId(id){return getSavedRows().some(r=>r.order_id===id)}
+function buildOrderRows(p){const pkg=PACKAGE_OPTIONS[p.package_type],orderId=`EXPO-${p.invoice_no}`,dt=`${p.order_date} 00:00:00`,addr=`${p.address_region} - ${p.address_district} - ${p.address_detail}`;return allocateAmounts(p.items,pkg).map((it,idx)=>({order_id:orderId,order_datetime:dt,customer_name:p.customer_name,phone:p.phone,address:addr,product_line:it.product_line,product_code:it.product_code,product_name:it.product_name,unit_price:it.unit_price,quantity:it.quantity,line_total:it.line_total,order_total:pkg.price,juice:idx===0?pkg.juice:0,ice_bag:idx===0?pkg.ice_bag:0,payment_method:p.payment_method,remarks:p.remarks}))}
+function updateSavedSummary(){const rows=getSavedRows(),count=new Set(rows.map(r=>r.order_id)).size;savedSummary.textContent=`已儲存 ${count} 張訂單 / ${rows.length} 行明細`} function resetForm(){orderForm.reset();$("orderDate").value=todayISO();invoiceNo.value="";phoneError.hidden=true;addressRegion.value="";addressDistrict.value="";selectedRegion="";selectedPackage="";qtyInputs().forEach(i=>i.value="0");updateAddressButton();updatePackageUI()}
+function csvEscape(v){const t=String(v??"");return /[",\n\r]/.test(t)?`"${t.replace(/"/g,'""')}"`:t} function rowsToCsv(rows){return [HEADERS.join(","),...rows.map(r=>HEADERS.map(h=>csvEscape(r[h])).join(","))].join("\r\n")} function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url)},500)}
+function exportCsv(){const rows=getSavedRows();if(!rows.length){showAlert("目前沒有可匯出的訂單。","error");return}downloadBlob(new Blob(["\ufeff"+rowsToCsv(rows)],{type:"text/csv;charset=utf-8"}),`expo_sales_orders_${todayISO()}.csv`)} function exportExcel(){const rows=getSavedRows();if(!rows.length){showAlert("目前沒有可匯出的訂單。","error");return}const th=HEADERS.map(h=>`<th>${escapeHtml(h)}</th>`).join(""),trs=rows.map(r=>`<tr>${HEADERS.map(h=>`<td>${escapeHtml(r[h]??"")}</td>`).join("")}</tr>`).join("");downloadBlob(new Blob([`<!doctype html><html><head><meta charset="utf-8"></head><body><table border="1"><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table></body></html>`],{type:"application/vnd.ms-excel;charset=utf-8"}),`expo_sales_orders_${todayISO()}.xls`)}
+function init(){renderPackages();renderPaymentMethods();renderProducts();resetForm();updateSavedSummary();phone.addEventListener("input",()=>{phone.value=phone.value.replace(/\D/g,"").slice(0,8);if(!phoneError.hidden)validatePhoneInline()});phone.addEventListener("blur",validatePhoneInline);invoiceNo.addEventListener("blur",()=>invoiceNo.value=padInvoice(invoiceNo.value));openAddressPicker.addEventListener("click",openPicker);closeAddressPicker.addEventListener("click",()=>addressPicker.hidden=true);addressPicker.addEventListener("click",e=>{if(e.target===addressPicker)addressPicker.hidden=true});districtSearch.addEventListener("input",renderPicker);clearDistrictSearch.addEventListener("click",()=>{districtSearch.value="";renderPicker()});allRegionTab.addEventListener("click",()=>{selectedRegion="";pickerMode="region";districtSearch.value="";renderPicker()});selectedRegionTab.addEventListener("click",()=>{pickerMode="district";districtSearch.value="";renderPicker()});noticeOk.addEventListener("click",closeNotice);noticeModal.addEventListener("click",e=>{if(e.target===noticeModal)closeNotice()});$("exportCsvBtn").addEventListener("click",exportCsv);$("exportExcelBtn").addEventListener("click",exportExcel);$("clearOrdersBtn").addEventListener("click",()=>{if(confirm("確定要清除已儲存的所有訂單？此操作不能復原。")){saveRows([]);showAlert("已清除本機暫存訂單。","success")}});orderForm.addEventListener("submit",e=>{e.preventDefault();clearAlert();invoiceNo.value=padInvoice(invoiceNo.value);validatePhoneInline();const p=collectPayload(),errs=validatePayload(p);if(errs.length){showAlert(errs.join("\n"),"error");return}const id=`EXPO-${p.invoice_no}`;if(duplicateOrderId(id)){showAlert(`Invoice No. ${p.invoice_no} 已經輸入過，請檢查收據號碼。`,"error");return}saveRows([...getSavedRows(),...buildOrderRows(p)]);resetForm();showAlert(`訂單已成功儲存。Order ID: ${id}`,"success")});}
+document.addEventListener("DOMContentLoaded", init);
+if ("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("./service-worker.js").catch(e=>console.log("Service worker registration failed:",e));});}
 </script>
-
-</body></html>`;
-  downloadBlob(new Blob([excelHtml], {type:"application/vnd.ms-excel;charset=utf-8"}), `expo_sales_orders_${todayISO()}.xls`);
-}
-
-phone.addEventListener("input", () => { phone.value = phone.value.replace(/\D/g, "").slice(0, 8); if(!phoneError.hidden) validatePhoneInline(); });
-phone.addEventListener("blur", validatePhoneInline);
-invoiceNo.addEventListener("blur", () => invoiceNo.value = padInvoice(invoiceNo.value));
-openAddressPicker.addEventListener("click", openPicker);
-closeAddressPicker.addEventListener("click", () => addressPicker.hidden = true);
-addressPicker.addEventListener("click", event => { if(event.target === addressPicker) addressPicker.hidden = true; });
-districtSearch.addEventListener("input", renderPicker);
-clearDistrictSearch.addEventListener("click", () => { districtSearch.value = ""; renderPicker(); });
-allRegionTab.addEventListener("click", () => { selectedRegion = ""; pickerMode = "region"; districtSearch.value = ""; renderPicker(); });
-selectedRegionTab.addEventListener("click", () => { pickerMode = "district"; districtSearch.value = ""; renderPicker(); });
-noticeOk.addEventListener("click", closeNotice);
-noticeModal.addEventListener("click", event => { if(event.target === noticeModal) closeNotice(); });
-$("exportCsvBtn").addEventListener("click", exportCsv);
-$("exportExcelBtn").addEventListener("click", exportExcel);
-$("clearOrdersBtn").addEventListener("click", () => {
-  if(confirm("確定要清除 iPad 內已儲存的所有訂單？此操作不能復原。")) {
-    saveRows([]);
-    showAlert("已清除本機暫存訂單。", "success");
-  }
-});
-orderForm.addEventListener("submit", event => {
-  event.preventDefault();
-  clearAlert();
-  invoiceNo.value = padInvoice(invoiceNo.value);
-  validatePhoneInline();
-  const payload = collectPayload();
-  const errors = validatePayload(payload);
-  if(errors.length){ showAlert(errors.join("\n"), "error"); return; }
-  const orderId = `EXPO-${payload.invoice_no}`;
-  if(duplicateOrderId(orderId)){ showAlert(`Invoice No. ${payload.invoice_no} 已經輸入過，請檢查收據號碼。`, "error"); return; }
-  const rows = buildOrderRows(payload);
-  saveRows([...getSavedRows(), ...rows]);
-  resetForm();
-  showAlert(`訂單已成功儲存。Order ID: ${orderId}`, "success");
-});
-
-initData();
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch((error) => {
-      console.log("Service worker registration failed:", error);
-    });
-  });
-}
-</script>
-
-</body>
-</html>
+</body></html>
